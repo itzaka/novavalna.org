@@ -1,0 +1,672 @@
+# ************************************************************
+# Sequel Pro SQL dump
+# Version 4096
+#
+# http://www.sequelpro.com/
+# http://code.google.com/p/sequel-pro/
+#
+# Host: 127.0.0.1 (MySQL 5.5.24)
+# Database: novavalna.org
+# Generation Time: 2014-03-19 10:21:49 +0000
+# ************************************************************
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table album_image
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `album_image`;
+
+CREATE TABLE `album_image` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `album_id` int(10) unsigned NOT NULL,
+  `image_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `album_image_album_id_index` (`album_id`),
+  KEY `album_image_image_id_index` (`image_id`),
+  CONSTRAINT `album_image_album_id_foreign` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `album_image_image_id_foreign` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+# Dump of table album_post
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `album_post`;
+
+CREATE TABLE `album_post` (
+  `album_id` int(10) unsigned NOT NULL,
+  `post_id` int(10) unsigned NOT NULL,
+  KEY `album_post_album_id_index` (`album_id`),
+  KEY `album_post_post_id_index` (`post_id`),
+  CONSTRAINT `album_post_album_id_foreign` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `album_post_post_id_foreign` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+# Dump of table albums
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `albums`;
+
+CREATE TABLE `albums` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `system` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `albums` WRITE;
+/*!40000 ALTER TABLE `albums` DISABLE KEYS */;
+
+INSERT INTO `albums` (`id`, `title`, `system`, `created_at`, `updated_at`)
+VALUES
+	(1,'Без албум',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(2,'Снимки от За нас',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(3,'Снимки от Новини',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(4,'Снимки от Събития',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(5,'Снимки от Дейности',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(6,'Снимки от Летен лагер',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(7,'Снимки от Видео блог',1,'2014-01-31 14:18:41','2014-02-05 01:45:59'),
+	(26,'ицоas',0,'2014-02-15 12:05:28','2014-02-28 00:49:51'),
+	(27,'bla di lba',0,'2014-02-28 00:39:16','2014-02-28 00:39:16');
+
+/*!40000 ALTER TABLE `albums` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table assigned_roles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `assigned_roles`;
+
+CREATE TABLE `assigned_roles` (
+  `user_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  KEY `assigned_roles_user_id_foreign` (`user_id`),
+  KEY `assigned_roles_role_id_foreign` (`role_id`),
+  CONSTRAINT `assigned_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
+  CONSTRAINT `assigned_roles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `assigned_roles` WRITE;
+/*!40000 ALTER TABLE `assigned_roles` DISABLE KEYS */;
+
+INSERT INTO `assigned_roles` (`user_id`, `role_id`)
+VALUES
+	(1,2),
+	(1,1),
+	(2,3),
+	(2,1);
+
+/*!40000 ALTER TABLE `assigned_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table banners
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `banners`;
+
+CREATE TABLE `banners` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `caption` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `clicks` int(11) NOT NULL,
+  `order` int(11) NOT NULL,
+  `position_id` int(10) unsigned NOT NULL,
+  `language_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `public` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `language_id` (`language_id`),
+  KEY `position_id` (`position_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `banners_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`),
+  CONSTRAINT `banners_ibfk_2` FOREIGN KEY (`position_id`) REFERENCES `banners_positions` (`id`),
+  CONSTRAINT `banners_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `banners` WRITE;
+/*!40000 ALTER TABLE `banners` DISABLE KEYS */;
+
+INSERT INTO `banners` (`id`, `image`, `url`, `caption`, `clicks`, `order`, `position_id`, `language_id`, `user_id`, `public`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+	(1,'Screen Shot 2014-01-09 at 2.32.09 PM.png','http://facebook.com','asdf',3,999,1,1,1,1,'2014-02-07 14:28:17','2014-02-13 21:03:59',NULL),
+	(2,'Screen Shot 2014-01-09 at 2.32.09 PM.png','http://bal.com','bla di bla',1412,123,1,1,1,0,'2014-04-10 10:57:45','2014-02-11 01:21:52',NULL);
+
+/*!40000 ALTER TABLE `banners` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table banners_positions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `banners_positions`;
+
+CREATE TABLE `banners_positions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `banners_positions` WRITE;
+/*!40000 ALTER TABLE `banners_positions` DISABLE KEYS */;
+
+INSERT INTO `banners_positions` (`id`, `title`, `slug`)
+VALUES
+	(1,'Слайдер','slider');
+
+/*!40000 ALTER TABLE `banners_positions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table categories
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `categories`;
+
+CREATE TABLE `categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
+  `language_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `public` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `type_id` (`type_id`),
+  KEY `language_id` (`language_id`),
+  KEY `categories_ibfk_3` (`user_id`),
+  CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `categories_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `categories_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+
+INSERT INTO `categories` (`id`, `title`, `slug`, `order`, `type_id`, `language_id`, `user_id`, `public`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+	(4,'test','test-3',999,1,1,1,1,'2014-02-03 22:01:22','2014-02-03 22:28:17','2014-02-03 22:28:17'),
+	(5,'test2','test-4',999,4,2,1,1,'2014-02-03 22:01:36','2014-02-18 19:22:25',NULL),
+	(6,'test','test-5',999,4,2,1,1,'2014-02-03 22:03:50','2014-02-03 22:03:50',NULL),
+	(7,'test','test-6',999,4,2,1,1,'2014-02-03 22:04:02','2014-02-03 22:12:09',NULL),
+	(8,'tst en','tst-en',999,1,2,1,1,'2014-02-03 22:33:17','2014-02-13 13:42:53','2014-02-13 13:42:53'),
+	(9,'blas','blas',999,2,1,1,1,'2014-02-12 00:33:04','2014-02-12 00:33:25','2014-02-12 00:33:25'),
+	(10,'asdf','asdf',999,1,1,1,1,'2014-02-12 00:34:50','2014-02-12 00:34:50',NULL),
+	(11,'гфсдгдс','gfsdgds',999,5,1,1,1,'2014-02-15 11:45:11','2014-02-15 11:45:11',NULL);
+
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table images
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `images`;
+
+CREATE TABLE `images` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `caption` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL DEFAULT '999',
+  `public` tinyint(1) NOT NULL,
+  `album_id` int(10) unsigned NOT NULL DEFAULT '1',
+  `user_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `album_id` (`album_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `images_ibfk_1` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `images_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `images` WRITE;
+/*!40000 ALTER TABLE `images` DISABLE KEYS */;
+
+INSERT INTO `images` (`id`, `url`, `caption`, `order`, `public`, `album_id`, `user_id`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+	(202,'11thConference.jpg','',999,1,1,1,'2014-02-05 10:15:16','2014-02-25 00:05:29',NULL),
+	(203,'New_Power_User_Mode.jpg','',999,1,1,1,'2014-02-05 10:15:17','2014-02-25 00:05:29',NULL),
+	(204,'Screen Shot 2014-01-09 at 2.32.09 PM.png','',999,1,1,1,'2014-02-05 10:15:18','2014-02-25 00:05:29',NULL),
+	(205,'Screen Shot 2014-01-07 at 11.25.07 PM.png','',999,1,1,1,'2014-02-05 10:15:19','2014-02-25 00:05:29',NULL),
+	(206,'Screen Shot 2014-01-07 at 11.11.17 PM.png','',999,1,1,1,'2014-02-05 10:15:19','2014-02-25 00:05:29',NULL),
+	(207,'Screen Shot 2014-01-07 at 11.14.25 PM.png','',999,1,1,1,'2014-02-05 10:15:19','2014-02-25 00:05:29',NULL),
+	(230,'DSC_0286.JPG','',999,1,2,1,'2014-02-25 00:09:57','2014-03-17 16:22:05',NULL),
+	(274,'blagavest-4.jpg','бла ди бла асд da',1,1,26,1,'2014-02-27 18:59:24','2014-03-17 16:22:05',NULL),
+	(275,'blagavest-5.jpg','',999,1,26,1,'2014-02-27 19:26:43','2014-03-17 16:22:05',NULL),
+	(286,'blagavest-2-5.jpg','',999,1,26,1,'2014-02-27 19:29:42','2014-02-27 23:38:01','2014-02-27 23:38:01'),
+	(287,'blagavest-3-5.jpg','',999,1,26,1,'2014-02-27 19:29:42','2014-02-27 23:38:01','2014-02-27 23:38:01'),
+	(288,'blagavest-2-6.jpg','',999,1,26,1,'2014-02-27 19:32:48','2014-02-27 23:38:01','2014-02-27 23:38:01'),
+	(289,'blagavest-3-6.jpg','',999,1,26,1,'2014-02-27 22:45:51','2014-02-27 23:38:01','2014-02-27 23:38:01'),
+	(290,'blagavest-3-7.jpg','',999,1,26,1,'2014-02-27 23:36:52','2014-02-27 23:38:01','2014-02-27 23:38:01'),
+	(291,'blagavest-9.jpg','',999,1,26,1,'2014-02-27 23:43:57','2014-03-17 16:22:05',NULL),
+	(292,'blagavest-3-8.jpg','asdf a',999,1,26,1,'2014-02-28 00:21:37','2014-03-17 16:22:06',NULL),
+	(293,'blagavest-2-7.jpg','dasd',323,1,26,1,'2014-02-28 00:23:27','2014-03-17 16:22:06',NULL),
+	(294,'blagavest-10.jpg','dasa',3,1,26,1,'2014-02-28 00:24:06','2014-03-17 16:22:06',NULL),
+	(295,'blagavest-3-9.jpg','',999,1,1,1,'2014-02-28 00:36:55','2014-03-17 16:22:05',NULL),
+	(296,'blagavest-11.jpg','',999,1,1,1,'2014-02-28 00:38:51','2014-03-17 16:22:05',NULL),
+	(297,'blagavest-12.jpg','',999,1,26,1,'2014-02-28 00:39:05','2014-02-28 00:39:30',NULL),
+	(298,'blagavest-2-8.jpg','',999,1,26,1,'2014-02-28 00:39:05','2014-02-28 00:39:30',NULL),
+	(299,'blagavest-3-10.jpg','',999,1,26,1,'2014-02-28 00:39:06','2014-03-17 17:56:14',NULL),
+	(300,'10906401_D.jpg','',999,1,7,1,'2014-03-17 10:54:20','2014-03-17 17:56:03',NULL),
+	(301,'pwscCys5fj.jpg','',999,0,1,1,'2014-03-17 10:54:36','2014-03-17 19:22:41',NULL),
+	(302,'IQ3czU5mhF.jpg','',999,0,1,1,'2014-03-17 10:56:10','2014-03-17 19:22:41',NULL),
+	(303,'Zf8MNnO2S1.jpg','',999,0,7,1,'2014-03-17 10:57:06','2014-03-17 11:33:52','2014-03-17 11:33:52'),
+	(304,'CIpViinOcg.jpg','',999,0,7,1,'2014-03-17 10:58:12','2014-03-17 11:33:57','2014-03-17 11:33:57'),
+	(305,'oaUcM6NR2N.jpg','',999,0,7,1,'2014-03-17 10:58:27','2014-03-17 11:33:58','2014-03-17 11:33:58'),
+	(306,'Z73LpaQ5S9.jpg','',999,0,7,1,'2014-03-17 10:58:35','2014-03-17 11:33:59','2014-03-17 11:33:59'),
+	(307,'RATYQEm7m6.jpg','',999,0,7,1,'2014-03-17 10:59:08','2014-03-17 11:36:26','2014-03-17 11:36:26'),
+	(308,'Q5WB08pfvJ.jpg','',999,0,7,1,'2014-03-17 11:00:44','2014-03-17 11:36:20','2014-03-17 11:36:20'),
+	(309,'Yn7zHVQpyl.jpg','',999,0,7,1,'2014-03-17 11:03:34','2014-03-17 11:36:26','2014-03-17 11:36:26'),
+	(310,'bJMU9ZUclv.jpg','',999,0,7,1,'2014-03-17 11:13:15','2014-03-17 11:36:26','2014-03-17 11:36:26'),
+	(311,'zFeO1YQNxl.jpg','',999,0,7,1,'2014-03-17 11:14:21','2014-03-17 11:36:26','2014-03-17 11:36:26'),
+	(312,'mpcSuLGwoD.jpg','',999,0,7,1,'2014-03-17 11:19:57','2014-03-17 11:36:26','2014-03-17 11:36:26'),
+	(313,'QIi6IOCepN.jpg','',999,0,7,1,'2014-03-17 11:23:26','2014-03-17 11:36:26','2014-03-17 11:36:26'),
+	(314,'1xIdIqyD16.jpg','',999,0,7,1,'2014-03-17 11:23:33','2014-03-17 11:36:27','2014-03-17 11:36:27'),
+	(315,'zeF09vQDN6.jpg','',999,0,7,1,'2014-03-17 11:30:28','2014-03-17 11:36:27','2014-03-17 11:36:27'),
+	(316,'P7RRaPZ2xJ.jpg','',999,0,7,1,'2014-03-17 11:31:53','2014-03-17 11:36:27','2014-03-17 11:36:27'),
+	(317,'yGmoB1cv6n.jpg','',999,1,7,1,'2014-03-17 11:33:02','2014-03-17 16:23:17',NULL);
+
+/*!40000 ALTER TABLE `images` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table languages
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `languages`;
+
+CREATE TABLE `languages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `languages` WRITE;
+/*!40000 ALTER TABLE `languages` DISABLE KEYS */;
+
+INSERT INTO `languages` (`id`, `title`, `slug`)
+VALUES
+	(1,'Български','bg'),
+	(2,'Английски','en');
+
+/*!40000 ALTER TABLE `languages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table migrations
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `migrations`;
+
+CREATE TABLE `migrations` (
+  `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+
+INSERT INTO `migrations` (`migration`, `batch`)
+VALUES
+	('2014_01_21_170033_confide_setup_users_table',1),
+	('2014_01_21_170231_entrust_setup_tables',2),
+	('2014_01_21_174449_create_types_table',3),
+	('2014_01_21_174455_create_languages_table',3),
+	('2014_01_21_174527_create_categories_table',4),
+	('2014_01_21_175150_create_posts_table',5),
+	('2014_01_30_193747_create_images_table',6),
+	('2014_01_30_223133_create_albums_table',7),
+	('2014_01_30_223435_pivot_album_image_table',8),
+	('2014_01_30_223447_pivot_album_post_table',8),
+	('2014_02_05_114457_create_banners_table',9),
+	('2014_02_07_133458_create_banners_positions_table',10),
+	('2014_02_10_182405_create_polls_table',11),
+	('2014_02_10_194521_create_polls_answers_table',11);
+
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table password_reminders
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `password_reminders`;
+
+CREATE TABLE `password_reminders` (
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
+# Dump of table permission_role
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `permission_role`;
+
+CREATE TABLE `permission_role` (
+  `permission_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  KEY `permission_role_permission_id_foreign` (`permission_id`),
+  KEY `permission_role_role_id_foreign` (`role_id`),
+  CONSTRAINT `permission_role_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`),
+  CONSTRAINT `permission_role_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `permission_role` WRITE;
+/*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
+
+INSERT INTO `permission_role` (`permission_id`, `role_id`)
+VALUES
+	(8,2),
+	(9,2),
+	(10,2),
+	(11,2),
+	(12,2),
+	(1,4),
+	(4,4),
+	(1,1),
+	(2,1),
+	(3,1),
+	(4,1),
+	(5,1),
+	(6,1),
+	(7,1),
+	(8,1),
+	(9,1),
+	(10,1),
+	(11,1),
+	(12,1),
+	(1,3),
+	(2,3),
+	(8,3),
+	(11,3),
+	(9,3);
+
+/*!40000 ALTER TABLE `permission_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table permissions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `permissions`;
+
+CREATE TABLE `permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `display_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `permissions` WRITE;
+/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
+
+INSERT INTO `permissions` (`id`, `name`, `display_name`, `created_at`, `updated_at`)
+VALUES
+	(1,'create_posts','Добавяне на Съдържание','2014-02-11 23:48:49','2014-02-11 23:48:49'),
+	(2,'create_about','Добавяне на За Нас','2014-02-11 23:49:51','2014-02-11 23:49:51'),
+	(3,'create_news','Добавяне на Новини','2014-02-11 23:50:09','2014-02-11 23:50:09'),
+	(4,'create_events','Добавяне на Събития','2014-02-11 23:50:20','2014-02-11 23:50:20'),
+	(5,'create_activities','Добавяне на Дейности','2014-02-11 23:50:27','2014-02-11 23:50:27'),
+	(6,'create_summercamp','Добавяне на Летен лагер','2014-02-11 23:50:53','2014-02-11 23:50:53'),
+	(7,'create_vlog','Добавяне на Видео Блог','2014-02-11 23:50:53','2014-02-11 23:50:53'),
+	(8,'create_categories','Добавяне на Категории','2014-02-11 23:50:53','2014-02-11 23:50:53'),
+	(9,'create_photos','Управление на Снимки','2014-02-11 23:50:53','2014-02-11 23:50:53'),
+	(10,'create_banners','Добавяне на Банери','2014-02-11 23:50:53','2014-02-11 23:50:53'),
+	(11,'create_polls','Добавяне на Анкети','2014-02-11 23:50:53','2014-02-11 23:50:53'),
+	(12,'manage_users','Управление на Потребители','2014-02-11 23:50:53','2014-02-11 23:50:53');
+
+/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table polls
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `polls`;
+
+CREATE TABLE `polls` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `active` int(11) NOT NULL,
+  `order` int(11) NOT NULL,
+  `votes` int(11) NOT NULL,
+  `language_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `public` tinyint(1) NOT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `polls_language_id_index` (`language_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `polls_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `polls_language_id_foreign` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `polls` WRITE;
+/*!40000 ALTER TABLE `polls` DISABLE KEYS */;
+
+INSERT INTO `polls` (`id`, `title`, `active`, `order`, `votes`, `language_id`, `user_id`, `public`, `deleted_at`, `created_at`, `updated_at`)
+VALUES
+	(1,'Кой е най- добрият отбор ?',1,999,214,1,1,1,NULL,'2014-02-10 21:04:45','2014-02-27 17:09:51'),
+	(2,'test',1,999,0,1,1,0,NULL,'2014-02-10 22:27:34','2014-02-10 22:27:34'),
+	(3,'test',1,999,1,1,1,0,NULL,'2014-02-10 22:27:45','2014-02-13 20:25:44'),
+	(4,'test',1,999,0,1,1,0,NULL,'2014-02-10 22:29:56','2014-02-10 22:29:56');
+
+/*!40000 ALTER TABLE `polls` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table polls_answers
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `polls_answers`;
+
+CREATE TABLE `polls_answers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `poll_id` int(10) unsigned NOT NULL,
+  `votes` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `polls_answers_poll_id_index` (`poll_id`),
+  CONSTRAINT `polls_answers_poll_id_foreign` FOREIGN KEY (`poll_id`) REFERENCES `polls` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `polls_answers` WRITE;
+/*!40000 ALTER TABLE `polls_answers` DISABLE KEYS */;
+
+INSERT INTO `polls_answers` (`id`, `title`, `poll_id`, `votes`)
+VALUES
+	(1,'Borussia Dortmund',1,201),
+	(2,'Борусия Дортмунд',1,10),
+	(3,'никой друг',1,51),
+	(4,'test',4,3),
+	(5,'test2',4,0),
+	(17,'bla di bla',3,1);
+
+/*!40000 ALTER TABLE `polls_answers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table posts
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `posts`;
+
+CREATE TABLE `posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `media_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `language_id` int(10) unsigned NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
+  `category_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `order` int(10) unsigned NOT NULL,
+  `date` timestamp NULL DEFAULT NULL,
+  `public` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `posts_language_id_index` (`language_id`),
+  KEY `posts_type_id_index` (`type_id`),
+  KEY `posts_category_id_index` (`category_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `posts_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `posts_language_id_foreign` FOREIGN KEY (`language_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `posts_type_id_foreign` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+
+INSERT INTO `posts` (`id`, `title`, `slug`, `media_url`, `image`, `content`, `language_id`, `type_id`, `category_id`, `user_id`, `order`, `date`, `public`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+	(10,'testa','testa-1',NULL,'vU2MDFaHjD3gfpcOly37.png','<p>testa</p>\r\n',1,1,10,1,99,NULL,0,'2014-02-03 22:28:07','2014-03-17 17:35:10',NULL),
+	(15,'Top 3 Worst Animal Parents','top-3-worst-animal-parents-1','http://www.youtube.com/watch?v=7WauUpq4N8I','yGmoB1cv6n.jpg','<p>Some animal parents are real jerks. They will pick their favorite offspring while the others are left to die and sometimes they even eat their young! ANIMALIST iOS App: https://itunes.apple.com/us/app/animalist/id828093059?mt=8 We&#39;re putting out new episodes Monday-Saturday, so please tune in daily and subscribe! Check out some of Alex&#39;s personal YouTube content on his Damitsgood808 channel!: http://www.youtube.com/damitsgood808 Check out some of Catie&#39;s personal YouTube content at: http://www.youtube.com/user/ANewHopeee?feature=watch Twitter: @catiewayne Facebook: facebook.com/catiexboxxy website: www.catiewayne.com Take a look at all of our other awesome animal shows at http://animalist.com And don&#39;t forget to subscribe to Animalist! http://www.youtube.com/subscription_center?add_user=animalistnetwork MORE FUN LINKS FOR YOUR FACES! Twitter: https://twitter.com/animalists Facebook: https://www.facebook.com/AnimalistNetwork Google+: http://gplus.to/animalist</p>\r\n',1,6,NULL,1,999,NULL,1,'2014-03-17 11:30:31','2014-03-17 11:39:38',NULL),
+	(16,'bla di lba','bla-di-lba-1',NULL,'','<p>bla</p>\r\n',1,1,10,1,999,NULL,1,'2014-03-17 18:17:37','2014-03-17 18:17:50',NULL),
+	(17,'yolo','yolo-1',NULL,'','<p>yolo</p>\r\n',1,1,NULL,2,999,NULL,1,'2014-03-17 20:23:49','2014-03-17 20:23:59',NULL);
+
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table roles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `roles`;
+
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+
+INSERT INTO `roles` (`id`, `name`, `created_at`, `updated_at`)
+VALUES
+	(1,'Admin','2014-02-11 23:51:29','2014-02-11 23:51:29'),
+	(2,'Editor In Chief','2014-02-11 23:51:29','2014-02-11 23:51:29'),
+	(3,'Test','2014-02-18 19:08:26','2014-02-18 19:08:26'),
+	(4,'test2','2014-02-18 19:08:38','2014-02-18 19:08:38');
+
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table types
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `types`;
+
+CREATE TABLE `types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `permission` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `album_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `album_id` (`album_id`),
+  CONSTRAINT `types_ibfk_1` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `types` WRITE;
+/*!40000 ALTER TABLE `types` DISABLE KEYS */;
+
+INSERT INTO `types` (`id`, `title`, `slug`, `permission`, `album_id`)
+VALUES
+	(1,'За нас','about','create_about',2),
+	(2,'Новини','news','create_news',3),
+	(3,'Събития','events','create_events',4),
+	(4,'Дейности','activities','create_activities',5),
+	(5,'Летен лагер','summer-camp','create_summercamp',6),
+	(6,'Видео блог','vlog','create_vlog',7);
+
+/*!40000 ALTER TABLE `types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table users
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `first_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `gender` enum('Мъж','Жена') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `confirmation_code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `confirmed` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+
+INSERT INTO `users` (`id`, `uid`, `username`, `first_name`, `last_name`, `email`, `password`, `photo`, `city`, `gender`, `birthday`, `confirmation_code`, `confirmed`, `created_at`, `updated_at`)
+VALUES
+	(1,NULL,'admin','itzo','Yatanski','itzo@me.com','$2y$10$Cklx82bEd.1kstK6UY5SC.OUiW9XCg5z2M877evINFqDzXqykYP0m',NULL,NULL,NULL,NULL,'21b17b40e12cdb1f955c4127277b0dc3',1,'2014-01-21 17:11:13','2014-02-24 15:18:52'),
+	(2,'557128205','iTzaka','Hristo','Yatanski','hristo.yatanski@gmail.com','$2y$10$xlyQ4nZM9XZmpyIhpsQNUeCjbiI/NCpyVdkyfdxLn89x1Fij4V6QG','https://graph.facebook.com/557128205/picture?width=400&height=400','Sofia, Bulgaria','Мъж','1987-09-23','1d40ee3a32dc2b9d2f3adcc6f3a27203',1,'2014-02-28 14:12:05','2014-02-28 15:02:26');
+
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
