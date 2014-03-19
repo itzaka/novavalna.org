@@ -1,0 +1,124 @@
+@extends('admin.layouts.master')
+
+@section('content')
+<section id="page">
+	{{Form::open(array('url' => 'admin/posts', 'data-abide' => 'data-abide'))}}
+	<h1 class="columns">Добавяне на публикация в {{$type->title}}</h1>
+	<div class="large-9 medium-8 medium-push-4 large-push-3 columns">
+		<div class="row">
+			<div class="medium-12 columns">
+				{{Form::text('title', null, array('id'=>'title', 'placeholder'=>'Заглавие', 'required' => 'required'))}}
+				<small class="error">Моля добавете заглавие</small>
+			</div>
+		</div>
+		@if($type->slug=='vlog')
+		<div class="row">
+			<div class="large-12 columns">
+				<div id="player"></div>
+			</div>
+		</div>
+		<br />
+		@endif
+		<div class="row">
+			<div class="large-12 columns">
+				{{Form::textarea('content', null, array('id' => 'content', 'required' => 'required'))}}
+			</div>
+		</div>
+		<br />
+		@if($type->slug!='vlog')
+		<div class="row">
+			<dl class="accordion large-12 columns" data-accordion>
+  				<dd>
+  					<a href="#panel1"><i class="fi-photo"></i> Прикачи галерия</a>
+					<div id="panel1" class="content row">
+						<div class="large-12 columns"> <label>Албуми</label></div>
+						<?php $i=0;?>
+						@foreach($albums as $album)
+							<?php $i++;?>
+							<div class="medium-4 small-6 columns end">
+								<label>{{Form::checkbox('albums[]', $album->id)}} {{$album->title}}</label>
+							</div>
+						@endforeach
+					</div>
+				</dd>
+			</dl>
+		</div>
+		@endif
+		{{Form::hidden('type', $type->id)}}
+	</div>
+	<div class="large-3 medium-4 medium-pull-8 large-pull-9 columns">
+			<div class="row collapse hide-for-small">
+				<div class="medium-7 medium-push-5 columns">
+					{{Form::submit('Запази', array('class'=>'button tiny expand'))}}
+				</div>
+				<div class="medium-5 medium-pull-7 columns">
+					<a href="{{URL::to('admin/posts?type='.$type->slug)}}" class="button tiny secondary expand">Откажи</a>
+				</div>
+			</div>
+			<hr>
+			<div class="row collapse">
+				<div class="medium-6 columns">
+					{{Form::label('language', 'Език')}}
+					@if ($language)
+						{{Form::select('language', $languages, $language->id)}}
+					@else
+						{{Form::select('language', $languages)}}
+					@endif
+				</div>
+				<div class="medium-5 columns">
+					{{Form::label('order', 'Позиция')}}
+					{{Form::text('order', 999, array('placeholder'=>'Позиция', 'required' => 'required'))}}
+					<small class="error">Моля добавете позиция</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="columns">
+					{{Form::label('category', 'Категория')}}
+					{{Form::select('category', $categories)}}
+				</div>
+			</div>
+			@if($type->slug=='events')
+			<div class="row">
+				<div class="columns">
+					{{Form::label('date', 'Дата')}}
+					{{Form::text('date', null, array('placeholder'=>'ГГГГ-ММ-ДД', 'pattern' => 'date'))}}
+					<small class="error">Моля добавете валидна дата</small>
+				</div>
+			</div>
+			@endif
+			@if($type->slug=='vlog')
+			<div class="row">
+				<div class="columns">
+					{{Form::label('media_url', 'Връзка към медия')}}<br />
+					{{Form::text('media_url', null, array('placeholder'=>'Връзка към YouTube, Vimeo, Blogger, Wordpress, видео (.mp4, .mov, .flv, .mp3, .ogg)'))}}
+					<small class="error">Моля добавете валидна дата</small>
+				</div>
+			</div>
+			@endif
+
+			<div class="row">
+				<div class="columns">
+					{{Form::label('image', 'Обложка')}}
+					<i class="fi-x-circle remove" style="cursor:pointer; position:absolute; right:14px; top:20px; width:1em; height:1em; background:#fff; text-align:center; line-height:1em; font-size:1.5em;)"></i>
+					<a class="various fancybox.ajax" href="{{URL::to('admin/images?field=image&album='.$type->album->id)}}"><img id="image" style="cursor:pointer" src="{{asset('images/photo.jpg')}}" /></a>
+					{{Form::hidden('image', null, array('placeholder'=>'Обложка'))}}
+				</div>
+			</div>
+			<br />
+			<div class="row collapse show-for-small">
+				<div class="medium-7 medium-push-5 columns">
+					{{Form::submit('Запази', array('class'=>'button tiny expand'))}}
+				</div>
+				<div class="medium-5 medium-pull-7 columns">
+					<a href="{{URL::to('admin/posts?type='.$type->slug)}}" class="button tiny secondary expand">Откажи</a>
+				</div>
+			</div>
+	</div>
+	{{Form::hidden('type', $type->id, array('id'=>'type'))}}
+	{{Form::close()}}
+
+</section>
+@stop
+@section('scripts')
+@include('admin.posts.scripts')
+@stop
