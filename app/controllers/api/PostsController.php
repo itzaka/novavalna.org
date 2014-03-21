@@ -26,7 +26,6 @@ class PostsController extends BaseController {
 		$skip		= is_numeric(Request::get('offset'))			? Request::get('offset'): 0;
 		$language 	= $this->lang->id;
 
-		
 		$posts 	= Post::with('type', 'category', 'language');
 
 		if (Request::get('types')) {
@@ -55,6 +54,11 @@ class PostsController extends BaseController {
 			if(empty($categories_arr))
 				return Response::json(array('error' => true, 'message' => 'Requested categories are invalid'));
 			$posts 	= $posts->whereIn('category_id', $categories_arr);
+		}
+		if ($search = Request::get('search')){
+			$posts 	= $posts->where(function($query) use($search){
+				$query->where('title', 'like', '%'.$search.'%')->orWhere('content', 'like', '%'.$search.'%');
+			});
 		}
 
 		$posts 	= $posts->whereLanguageId($language)->take($take)->skip($skip)->orderBy($order, $sort)->get();

@@ -1,21 +1,44 @@
-## Laravel PHP Framework
+#API
 
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/version.png)](https://packagist.org/packages/laravel/framework) [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.png)](https://packagist.org/packages/laravel/framework) [![Build Status](https://travis-ci.org/laravel/framework.png)](https://travis-ci.org/laravel/framework)
+##POSTS
+api/posts - all posts
+api/posts/{id} - post with id {id}
+api/posts?options - filter posts based on options, check bellow for available options
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
 
-Laravel aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Ruby on Rails, ASP.NET MVC, and Sinatra.
+##CATEGORIES
+api/categories - all categories
+api/categories/{id} - category with id {id}
+api/categories?options - filter categories based on options, check bellow for available options
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+##POLLS
+api/polls - all polls
+api/polls/{id} - poll with id {id}
+api/polls?options - filter polls based on options, check bellow for available options
 
-## Official Documentation
+##BANNERS
+api/banners - all banners
+api/banners/{id} - banner with id {id}
+api/banners?options - filter banners based on options, check bellow for available options
 
-Documentation for the entire framework can be found on the [Laravel website](http://laravel.com/docs).
+##ALBUMS
+api/albums - all albums
+api/albums/{id} - album with id {id}
+api/albums?options - filter albums based on options, check bellow for available options
 
-### Contributing To Laravel
+##USERS
+api/user - get details of logged in user
+(POST) api/user/login - logs in a user; input parameters: username or email, password, remember - bool (optional)
+(POST) api/user - creates a new user; input parameters: username, email, first_name, last_name, password, password_confirmation
+(PUT) api/user - updates user info; input parameters: username, email, first_name, last_name, password
 
-**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+##OPTIONS
+types={array of type slugs (about,news,events,activities,summer-camp,vlog) or ids} - available for posts, categories
+positions={array of position slugs (slider…) or ids} - available for banners
+categories={array of category ids} - available for posts
+search={search query} - filter posts (each parameter is optional) - available for posts
+language={(en, bg)} - posts, categories - available for posts, categories, polls
+order={(created_at-default, order, title, type_id, category_id, id)} - available for  posts, categories, polls
+sort={(asc, desc)} - available for posts, categories, polls
+limit={limit (10-default)} - available for posts, categories, polls
+offset={offset (0-default)} - available for posts, categories, polls

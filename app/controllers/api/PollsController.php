@@ -18,7 +18,6 @@ class PollsController extends BaseController {
 	}
 	public function index()
 	{
-
 		$order_arr  = array('created_at', 'order', 'title', 'type_id', 'category_id', 'id');
 		$sort_arr 	= array('asc', 'desc');
 		$order 		= in_array(Request::get('order') , $order_arr)	? Request::get('order') : "created_at";
@@ -26,7 +25,6 @@ class PollsController extends BaseController {
 		$take 		= is_numeric(Request::get('limit'))				? Request::get('limit') : 10;
 		$skip		= is_numeric(Request::get('offset'))			? Request::get('offset'): 0;
 		$language 	= $this->lang->id;
-
 		
 		$polls 	= Poll::with('answers', 'language');
 

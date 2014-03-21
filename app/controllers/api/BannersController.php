@@ -25,7 +25,6 @@ class BannersController extends BaseController {
 		$take 		= is_numeric(Request::get('limit'))				? Request::get('limit') : 10;
 		$skip		= is_numeric(Request::get('offset'))			? Request::get('offset'): 0;
 		$language 	= $this->lang->id;
-
 		
 		$banners 	= Banner::with('position', 'language');
 
