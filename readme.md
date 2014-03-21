@@ -6,33 +6,33 @@ api/posts/{id} - post with id {id}
 api/posts?options - filter posts based on options, check bellow for available options
 
 
-##CATEGORIES
+**CATEGORIES
 api/categories - all categories
 api/categories/{id} - category with id {id}
 api/categories?options - filter categories based on options, check bellow for available options
 
-##POLLS
+**POLLS
 api/polls - all polls
 api/polls/{id} - poll with id {id}
 api/polls?options - filter polls based on options, check bellow for available options
 
-##BANNERS
+**BANNERS
 api/banners - all banners
 api/banners/{id} - banner with id {id}
 api/banners?options - filter banners based on options, check bellow for available options
 
-##ALBUMS
+**ALBUMS
 api/albums - all albums  
 api/albums/{id} - album with id {id}  
 api/albums?options - filter albums based on options, check bellow for available options  
   
-##USERS
+**USERS
 api/user - get details of logged in user  
 (POST) api/user/login - logs in a user; input parameters: username or email, password, remember - bool (optional)  
 (POST) api/user - creates a new user; input parameters: username, email, first_name, last_name, password, password_confirmation  
 (PUT) api/user - updates user info; input parameters: username, email, first_name, last_name, password  
   
-##OPTIONS
+**OPTIONS
 types={array of type slugs (about,news,events,activities,summer-camp,vlog) or ids} - available for posts, categories  
 positions={array of position slugs (slider…) or ids} - available for banners  
 categories={array of category ids} - available for posts  
